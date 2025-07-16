@@ -7,6 +7,7 @@ namespace QuizAppAPI_PRM.Repository.Interface
     {
         Task<Subject> GetSubjectByNameAsync(string name);
         Task<IEnumerable<Subject>> GetAllSubjectAsync();
+        Task<IEnumerable<Subject>> GetAllSubjectByTeacherAsync(Guid teacherId);
         Task<Subject> GetSubjectByIdAsync(Guid id);
         Task<Subject> AddSubjectAsync(Subject subject);
         Task<Subject> UpdateSubjectAsync(Subject subject);

@@ -48,6 +48,13 @@ namespace QuizAppAPI_PRM.Repository.Implement
             return subject;
         }
 
+        public async Task<IEnumerable<Subject>> GetAllSubjectByTeacherAsync(Guid teacherId)
+        {
+            return await db.Subjects
+                .Where(s => s.UserId == teacherId)
+                .ToListAsync();
+        }
+
         public async Task<Subject> GetSubjectByNameAsync(string name)
         {
             var subject = await db.Subjects.FirstOrDefaultAsync(s => s.SubjectName == name);

@@ -80,7 +80,27 @@ namespace QuizAppAPI.Controllers
             };
             return Ok(response);
         }
-
+        // GET: https://localhost:7184/api/Subject/teacher/{teacherId}
+        [HttpGet]
+        [Route("teacher/{teacherId:guid}")]
+        public async Task<IActionResult> GetAllSubjectByTeacher(Guid teacherId)
+            {
+                var subjects = await repo.GetAllSubjectByTeacherAsync(teacherId);
+                var response = new List<SubjectDTO>();
+                foreach (var subject in subjects)
+            {
+        response.Add(new SubjectDTO
+        {
+            SubjectId = subject.SubjectId,
+            SubjectName = subject.SubjectName,
+            SubjectDetail = subject.SubjectDetail,
+            UrlImage = subject.UrlImage,
+            VideoUrl = subject.VideoUrl,
+            UserId = subject.UserId
+        });
+    }
+    return Ok(response);
+}
         // POST: https://localhost:7184/api/Subject
         [HttpPost]
         public async Task<IActionResult> CreateSubject([FromBody] AddSubjectRequestDTO request)

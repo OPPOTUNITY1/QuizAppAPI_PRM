@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using QuizAppAPI_PRM.Models.Domain;
 using QuizAppAPI_PRM.Models.DTO;
 using QuizAppAPI_PRM.Repository.Interface;
@@ -105,6 +106,10 @@ namespace QuizAppAPI.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateSubject([FromBody] AddSubjectRequestDTO request)
         {
+            if (request.SubjectName.IsNullOrEmpty() || request.SubjectDetail.IsNullOrEmpty() || request.UrlImage.IsNullOrEmpty() || request.VideoUrl.IsNullOrEmpty())
+            {
+                return BadRequest("Subject name, detail, image URL, and video URL cannot be empty.");
+            }
             var subject = new Subject
             {
                 SubjectName = request.SubjectName,

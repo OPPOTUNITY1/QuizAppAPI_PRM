@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using QuizAppAPI_PRM.Data;
 using QuizAppAPI_PRM.Models.Domain;
 using QuizAppAPI_PRM.Models.DTO;
@@ -46,13 +47,16 @@ namespace QuizAppAPI_PRM.Controllers
             var exists = await userRepository.UsernameExistsAsync(request.Username);
             if (exists)
                 return BadRequest("Username already exists.");
-
+            if (request.Username.IsNullOrEmpty() || request.PasswordHash.IsNullOrEmpty())
+            {
+                return BadRequest("Username and password cannot be empty.");
+            }
             var user = new User
             {
                 UserId = Guid.NewGuid(),
                 Username = request.Username,
                 PasswordHash = request.PasswordHash,
-                RoleId = request.RoleId,
+                RoleId = Guid.Parse("28481261-dd77-4108-8817-4812cc951e93"), // thay id student o day nha
             };
 
             await userRepository.CreateAsync(user);

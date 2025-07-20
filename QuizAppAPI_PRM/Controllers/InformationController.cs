@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using QuizAppAPI_PRM.Models.Domain;
 using QuizAppAPI_PRM.Models.DTO;
 using QuizAppAPI_PRM.Repository.Interface;
@@ -88,6 +89,13 @@ namespace QuizAppAPI_PRM.Controllers
         [HttpPost]
         public async Task<IActionResult> AddInformation([FromBody] AddInformationRequestDTO addInformationRequestDTO)
         {
+            if(addInformationRequestDTO.FullName.IsNullOrEmpty() || 
+               addInformationRequestDTO.Email.IsNullOrEmpty() || 
+               addInformationRequestDTO.Phone.IsNullOrEmpty() || 
+               addInformationRequestDTO.UserId == Guid.Empty)
+            {
+                return BadRequest("Invalid information data.");
+            }
             var information = new Information
             {
                 UserId = addInformationRequestDTO.UserId,

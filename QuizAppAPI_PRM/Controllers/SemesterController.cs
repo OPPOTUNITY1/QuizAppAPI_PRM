@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using QuizAppAPI_PRM.Models.Domain;
 using QuizAppAPI_PRM.Models.DTO;
 using QuizAppAPI_PRM.Repository.Interface;
@@ -76,6 +77,10 @@ namespace QuizAppAPI.Controllers
         [HttpPost]
         public async Task<IActionResult> AddSemester([FromBody] AddSemesterRequestDTO request)
         {
+            if (request.SemesterName.IsNullOrEmpty())
+            {
+                return BadRequest("Semester name cannot be empty.");
+            }
             var semester = new Semester
             {
                 SubjectId = request.SubjectId,

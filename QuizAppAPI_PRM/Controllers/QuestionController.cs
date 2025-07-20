@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using QuizAppAPI_PRM.Models.DTO;
 using QuizAppAPI_PRM.Repository.Interface;
 
@@ -61,6 +62,10 @@ namespace QuizAppAPI_PRM.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateQuestion([FromBody] AddQuestionRequestDTO request)
         {
+            if (request.Content.IsNullOrEmpty())
+            {
+                return BadRequest("Question content cannot be empty.");
+            }
             var question = new Models.Domain.Question
             {
                 SemesterId = request.SemesterId,
@@ -88,6 +93,10 @@ namespace QuizAppAPI_PRM.Controllers
             }
             existingQuestion.Content = request.Content;
             var question = await repo.UpdateQuestionAsync(existingQuestion);
+            if (question.Content.Equals(existingQuestion.Content))
+            {
+                return BadRequest("No changes made to the question content.");
+            }
             var response = new QuestionDTO
             {
                 QuestionId = question.QuestionId,
